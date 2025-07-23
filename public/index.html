@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tictactoe</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C6QJFEKLTN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-C6QJFEKLTN');
+    </script>
+
+    <script src="wasm/wasm_exec.js"></script>
+    <script>
+        const go = new Go(); // Defined in wasm_exec.js
+        const WASM_URL = 'wasm/wasm.wasm';
+
+        var wasm;
+        let wasmReady = false;
+
+        if ('instantiateStreaming' in WebAssembly) {
+            WebAssembly.instantiateStreaming(fetch(WASM_URL), go.importObject).then(function (obj) {
+                wasm = obj.instance;
+                go.run(wasm);
+                wasmReady = true;
+            })
+        } else {
+            fetch(WASM_URL).then(resp =>
+                resp.arrayBuffer()
+            ).then(bytes =>
+                WebAssembly.instantiate(bytes, go.importObject).then(function (obj) {
+                    wasm = obj.instance;
+                    go.run(wasm);
+                    wasmReady = true;
+                })
+            )
+        }
+
+        function jsRunAction(data) {
+            const encoder = new TextEncoder();
+            const encodedData = encoder.encode(JSON.stringify(data));
+            const result = tictactoeRunAction(encodedData);
+            const json = new TextDecoder().decode(result);
+            return JSON.parse(json);
+        }
+
+        function jsBotRunAction() {
+            const result = tictactoeBotRunAction();
+            const json = new TextDecoder().decode(result);
+            return JSON.parse(json);
+        }
+
+        function jsTicTacToeNew(rules) {
+            const encoder = new TextEncoder();
+            const encodedData = encoder.encode(JSON.stringify(rules));
+            const result = tictactoeNew(encodedData);
+            const json = new TextDecoder().decode(result);
+            return JSON.parse(json);
+        }
+
+    </script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+
+</html>
