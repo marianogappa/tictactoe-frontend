@@ -6,7 +6,7 @@ This repository is the minimal frontend for a TicTacToe game, built with React a
 It’s intended as an **educational example**, not a production-ready project.
 
 📖 You can read the full blog post here:  
-[Making Games in Go: 3 Days with LLMs vs 3 Months Without](https://marianogappa.github.io/software/2025/07/06/i-made-two-card-games-in-go/)
+[Making Games in Go: 3 Days with LLMs vs 3 Months Without](https://marianogappa.github.io/software/2025/08/24/i-made-two-card-games-in-go/)
 
 ---
 
